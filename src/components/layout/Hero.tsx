@@ -1,4 +1,3 @@
-import React from "react";
 import Divider from "../ui/Divider";
 import Logo from "@/assets/logo.svg";
 
