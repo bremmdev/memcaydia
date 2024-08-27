@@ -41,10 +41,7 @@ export async function getGames(): Promise<HttpResponseInit> {
 
   return {
     status: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(games),
+    jsonBody: games,
   };
 }
 
