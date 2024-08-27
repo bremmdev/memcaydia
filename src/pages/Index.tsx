@@ -1,5 +1,11 @@
 import React from "react";
+import Hero from "@/components/layout/Hero";
 
 export default function IndexPage() {
-  return <div>home page</div>;
+  return (
+    <>
+      <Hero />
+      <div className="text-slate-900 my-16">index page</div>
+    </>
+  );
 }

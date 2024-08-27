@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import Index from "@/pages/Index";
+import Games from "@/pages/Games";
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Index />} />
+          <Route path="/games" element={<Games />} />
         </Route>
       </Routes>
     </Router>
