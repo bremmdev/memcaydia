@@ -1,5 +1,4 @@
 import { useGames } from "@/hooks/useGames";
-import image from "@/assets/number-sequence.webp";
 import { Link } from "react-router-dom";
 import { MoveRight } from "lucide-react";
 import Spinner from "./ui/Spinner";
@@ -31,7 +30,7 @@ export default function GamesList() {
                 key={game.id}
                 className="group-hover:-translate-y-1 transition-all"
               >
-                <img src={image} alt={game.name} className="max-h-56 w-full" />
+                <img src={game.image} alt={game.name} className="max-h-56 w-full" />
                 <div className="p-6 border border-teal-500 border-t-0 rounded-b-md space-y-3 group-hover:border-primary-teal">
                   <h3 className="text-primary-teal text-lg font-medium uppercase">
                     {game.name}
