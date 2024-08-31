@@ -11,7 +11,7 @@ function gameLoader(games?: Array<Game>, slug?: string) {
     return null;
   }
   /* @vite-ignore */
-  return import(`../components/games/${game?.name.replace(/ /g, "")}`);
+  return import(`../components/games/${game?.name.replace(/ /g, "")}.tsx`);
 }
 
 export default function Game() {
