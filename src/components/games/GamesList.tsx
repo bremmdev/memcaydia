@@ -1,7 +1,7 @@
 import { useGames } from "@/hooks/useGames";
 import { Link } from "react-router-dom";
 import { MoveRight } from "lucide-react";
-import Spinner from "./ui/Spinner";
+import Spinner from "../ui/Spinner";
 import { slugify } from "@/lib/utils";
 
 export default function GamesList() {
