@@ -11,6 +11,7 @@ function gameLoader(games?: Array<Game>, slug?: string) {
     return null;
   }
   /* @vite-ignore */
+  //rollup needs file extensions to be specified for dynamic imports
   return import(`../components/games/${game?.name.replace(/ /g, "")}.tsx`);
 }
 
