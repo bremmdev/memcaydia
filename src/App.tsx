@@ -5,6 +5,7 @@ import Layout from "@/components/layout/Layout";
 import Index from "@/pages/Index";
 import Games from "@/pages/Games";
 import Game from "@/pages/Game";
+import NotFound from "@/components/ui/NotFound";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,6 +26,7 @@ function App() {
             <Route path="/" element={<Index />} />
             <Route path="/games" element={<Games />} />
             <Route path="/games/:slug" element={<Game />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </Router>

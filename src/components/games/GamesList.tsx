@@ -56,7 +56,7 @@ export default function GamesList() {
   }
 
   return (
-    <section className="my-16 space-y-12 md:space-y-16">
+    <section className="space-y-12 md:space-y-16">
       <h2 className="text-2xl sm:text-4xl text-primary-teal tracking-wide font-bold text-center leading-tight max-w-2xl mx-auto">
         Enhance your brain health through fun and engaging memory games
       </h2>
