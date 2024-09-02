@@ -43,8 +43,8 @@ const NumberInput = () => {
 
 export default function NumberSequence() {
   const [isPlaying, setIsPlaying] = React.useState(false);
-  const [number, setNumber] = React.useState(generateRandomNumber(1));
-  const [level, setLevel] = React.useState(1);
+  // const [number, setNumber] = React.useState(generateRandomNumber(1));
+  // const [level, setLevel] = React.useState(1);
 
   const { slug } = useParams();
 
