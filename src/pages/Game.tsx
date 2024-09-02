@@ -4,10 +4,12 @@ import { useParams } from "react-router-dom";
 import { useGames } from "@/hooks/useGames";
 import type { Game } from "@/lib/types";
 import { slugify } from "@/lib/utils";
+import Container from "@/components/layout/Container";
+import GameHero from "@/components/games/GameHero";
 
 function gameLoader(games?: Array<Game>, slug?: string) {
   const game = games?.find((game) => slugify(game.name) === slug);
-  if(!game) {
+  if (!game) {
     return null;
   }
   /* @vite-ignore */
@@ -48,13 +50,18 @@ export default function Game() {
   }
 
   //if the slug does not match any game, return a not found message
-  if(!isLoading && !game) {
+  if (!isLoading && !game) {
     return <div>Game not found</div>;
   }
 
   return (
     <div>
-     {GameComponent && <GameComponent />}
+      {GameComponent && (
+        <Container>
+          <GameHero game={game!} />
+          <GameComponent />
+        </Container>
+      )}
     </div>
   );
 }
