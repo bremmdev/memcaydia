@@ -4,7 +4,7 @@ import Logo from "@/assets/logo.svg";
 export default function Hero() {
   return (
     <>
-      <div className="text-white relative bg-primary-teal flex items-center flex-col space-y-12 px-4 py-8 md:mb-24">
+      <div className="text-white relative bg-primary-teal flex items-center flex-col space-y-12 px-4 py-8 md:mb-12">
         <div className="max-w-[75%] md:max-w-2xl space-y-8 md:space-y-12">
           <h1 className="text-4xl sm:text-6xl tracking-wide font-bold text-center leading-tight">
             Sharpen your mind with{" "}
