@@ -1,27 +1,30 @@
 import React from "react";
 import useScrollToTop from "@/hooks/useScrollToTop";
 import { useParams } from "react-router-dom";
-import { useGames } from "@/hooks/useGames";
+import { useGame } from "@/hooks/useGames";
 import type { Game } from "@/lib/types";
-import { slugify } from "@/lib/utils";
 import Container from "@/components/layout/Container";
 import GameHero from "@/components/games/GameHero";
+import NotFound from "@/components/ui/NotFound";
+import Spinner from "@/components/ui/Spinner";
 
-function gameLoader(games?: Array<Game>, slug?: string) {
-  const game = games?.find((game) => slugify(game.name) === slug);
+function gameLoader(game?: Game) {
   if (!game) {
     return null;
   }
   /* @vite-ignore */
   //rollup needs file extensions to be specified for dynamic imports
-  return import(`../components/games/${game?.name.replace(/ /g, "")}.tsx`);
+  const unsluggedGameName = game?.name.replace(/ /g, "");
+  return import(
+    `../components/games/${unsluggedGameName}/${unsluggedGameName}.tsx`
+  );
 }
 
 export default function Game() {
   useScrollToTop();
 
   const { slug } = useParams();
-  const { data: games, isLoading } = useGames();
+  const { data: game, isLoading } = useGame(slug as string);
 
   //contains the dynamically imported game component
   const [GameComponent, setGameComponent] =
@@ -29,7 +32,7 @@ export default function Game() {
 
   React.useEffect(() => {
     const loadGameComponent = async () => {
-      const component = await gameLoader(games, slug);
+      const component = await gameLoader(game);
       if (component) {
         setGameComponent(React.lazy(async () => component));
       } else {
@@ -38,20 +41,22 @@ export default function Game() {
     };
 
     //dynamically import the game component when data is loaded
-    if (!isLoading && games) {
+    if (!isLoading && game) {
       loadGameComponent();
     }
-  }, [slug, games, isLoading]);
-
-  const game = games?.find((game) => slugify(game.name) === slug);
+  }, [slug, game, isLoading]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Container>
+        <Spinner />
+      </Container>
+    );
   }
 
   //if the slug does not match any game, return a not found message
   if (!isLoading && !game) {
-    return <div>Game not found</div>;
+    return <NotFound />;
   }
 
   return (

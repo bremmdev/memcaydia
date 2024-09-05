@@ -2,9 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Layout from "@/components/layout/Layout";
-import Index from "@/pages/Index";
-import Games from "@/pages/Games";
-import Game from "@/pages/Game";
+import IndexPage from "@/pages/IndexPage";
+import GamesPage from "@/pages/GamesPage";
+import GamePage from "@/pages/GamePage";
 import NotFound from "@/components/ui/NotFound";
 
 const queryClient = new QueryClient({
@@ -23,9 +23,9 @@ function App() {
       <Router future={{ v7_startTransition: true }}>
         <Routes>
           <Route element={<Layout />}>
-            <Route path="/" element={<Index />} />
-            <Route path="/games" element={<Games />} />
-            <Route path="/games/:slug" element={<Game />} />
+            <Route path="/" element={<IndexPage />} />
+            <Route path="/games" element={<GamesPage />} />
+            <Route path="/games/:slug" element={<GamePage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
