@@ -1,6 +1,6 @@
 import { useGames } from "@/hooks/useGames";
 import { Link } from "react-router-dom";
-import { MoveRight } from "lucide-react";
+// import { MoveRight } from "lucide-react";
 import Spinner from "../ui/Spinner";
 import { slugify } from "@/lib/utils";
 
@@ -61,12 +61,12 @@ export default function GamesList() {
         Enhance your brain health through fun and engaging memory games
       </h2>
       {content}
-      <Link
+      {/* <Link
         to="/games"
         className="text-white bg-primary-teal px-4 py-2 w-fit rounded-md font-medium uppercase hover:bg-opacity-90 flex gap-2 items-center justify-center mx-auto"
       >
         View all games <MoveRight className="size-5" />
-      </Link>
+      </Link> */}
     </section>
   );
 }
