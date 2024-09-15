@@ -19,7 +19,7 @@ export async function getGames(): Promise<HttpResponseInit> {
 
   const querySpec: SqlQuerySpec = {
     query:
-      "SELECT games.id, games.name, games.description, games.category, games.image FROM games WHERE games.isPublished = true",
+      "SELECT games.id, games.name, games.description, games.category, games.image FROM games WHERE games.isPublished = true ORDER BY games.name",
   };
 
   try {
