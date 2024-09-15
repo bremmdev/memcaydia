@@ -5,3 +5,8 @@ export type Game = {
   category: string;
   image: string;
 };
+
+export type GameComponentType = {
+  isPlaying: boolean;
+  setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
+}

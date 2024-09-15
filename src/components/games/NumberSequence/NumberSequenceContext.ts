@@ -9,8 +9,6 @@ type NumberSequenceContextType = {
   setLevel: React.Dispatch<React.SetStateAction<number>>;
   timeRemaining: number;
   setTimeRemaining: React.Dispatch<React.SetStateAction<number>>;
-  isPlaying: boolean;
-  setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
   gameOver: boolean;
   setGameOver: React.Dispatch<React.SetStateAction<boolean>>;
 };

@@ -39,7 +39,6 @@ const Result = ({
 };
 
 export default function ReactionTime() {
-  const [isPlaying, setIsPlaying] = React.useState(false);
   const [showSquare, setShowSquare] = React.useState(false);
   const [reactionTimes, setReactionTimes] = React.useState<number[]>([]);
   const [timeStamp, setTimeStamp] = React.useState<number>(0);
@@ -67,10 +66,6 @@ export default function ReactionTime() {
 
     return () => clearTimeout(timeout);
   }, [showSquare]);
-
-  if (!isPlaying) {
-    return <Button onClick={() => setIsPlaying(true)}>Start</Button>;
-  }
 
   const showResult = reactionTimes.length === 5;
 

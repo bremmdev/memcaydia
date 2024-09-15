@@ -2,11 +2,12 @@ import React from "react";
 import useScrollToTop from "@/hooks/useScrollToTop";
 import { useParams } from "react-router-dom";
 import { useGame } from "@/hooks/useGames";
-import type { Game } from "@/lib/types";
+import type { Game, GameComponentType } from "@/lib/types";
 import Container from "@/components/layout/Container";
 import GameHero from "@/components/games/GameHero";
 import NotFound from "@/components/ui/NotFound";
 import Spinner from "@/components/ui/Spinner";
+import Button from "@/components/ui/Button";
 
 function gameLoader(game?: Game) {
   if (!game) {
@@ -26,9 +27,11 @@ export default function Game() {
   const { slug } = useParams();
   const { data: game, isLoading } = useGame(slug as string);
 
+  const [isPlaying, setIsPlaying] = React.useState(false);
+
   //contains the dynamically imported game component
   const [GameComponent, setGameComponent] =
-    React.useState<React.ComponentType | null>(null);
+    React.useState<React.ComponentType<GameComponentType> | null>(null);
 
   React.useEffect(() => {
     const loadGameComponent = async () => {
@@ -64,7 +67,19 @@ export default function Game() {
       {GameComponent && (
         <Container>
           <GameHero game={game!} />
-          <GameComponent />
+          {isPlaying ? (
+            <GameComponent isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
+          ) : (
+            <Button
+              onClick={() => {
+                React.startTransition(() => {
+                  setIsPlaying(true);
+                });
+              }}
+            >
+              Start
+            </Button>
+          )}
         </Container>
       )}
     </div>

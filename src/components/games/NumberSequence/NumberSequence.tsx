@@ -6,6 +6,7 @@ import {
   TOTAL_TIME,
   useNumberSequence,
 } from "./NumberSequenceContext";
+import { GameComponentType } from "@/lib/types";
 
 const NumberInput = () => {
   const { number, level, setLevel, setTimeRemaining, setNumber, setGameOver } =
@@ -93,8 +94,7 @@ const GameOver = () => {
   );
 };
 
-export default function NumberSequence() {
-  const [isPlaying, setIsPlaying] = React.useState(false);
+export default function NumberSequence({isPlaying}: GameComponentType) {
   const [timeRemaining, setTimeRemaining] = React.useState<number>(TOTAL_TIME);
   const [number, setNumber] = React.useState(
     React.useMemo(() => generateRandomNumber(1), [])
@@ -116,10 +116,6 @@ export default function NumberSequence() {
     }
   }, [isPlaying, timeRemaining]);
 
-  if (!isPlaying) {
-    return <Button onClick={() => setIsPlaying(true)}>Start</Button>;
-  }
-
   return (
     <NumberSequenceContext.Provider
       value={{
@@ -129,8 +125,6 @@ export default function NumberSequence() {
         setLevel,
         timeRemaining,
         setTimeRemaining,
-        isPlaying,
-        setIsPlaying,
         gameOver,
         setGameOver,
       }}
