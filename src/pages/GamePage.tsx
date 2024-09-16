@@ -1,6 +1,6 @@
 import React from "react";
 import useScrollToTop from "@/hooks/useScrollToTop";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useGame } from "@/hooks/useGames";
 import type { Game, GameComponentType } from "@/lib/types";
 import Container from "@/components/layout/Container";
@@ -8,6 +8,7 @@ import GameHero from "@/components/games/GameHero";
 import NotFound from "@/components/ui/NotFound";
 import Spinner from "@/components/ui/Spinner";
 import Button from "@/components/ui/Button";
+import { MoveLeft } from "lucide-react";
 
 function gameLoader(game?: Game) {
   if (!game) {
@@ -66,6 +67,13 @@ export default function Game() {
     <div>
       {GameComponent && (
         <Container>
+          <Link
+            to="/"
+            className="flex text-primary-teal justify-center gap-2 items-center border border-primary-teal px-4 py-2 w-fit rounded-md font-medium uppercase hover:bg-primary-teal/10 -mt-6"
+          >
+            <MoveLeft className="size-5" />
+            Back
+          </Link>
           <GameHero game={game!} />
           {isPlaying ? (
             <GameComponent isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
