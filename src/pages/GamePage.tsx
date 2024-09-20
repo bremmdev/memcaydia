@@ -9,6 +9,7 @@ import NotFound from "@/components/ui/NotFound";
 import Spinner from "@/components/ui/Spinner";
 import Button from "@/components/ui/Button";
 import { MoveLeft } from "lucide-react";
+import useDocumentTitle from "@/hooks/useDocumentTitle";
 
 function gameLoader(game?: Game) {
   if (!game) {
@@ -49,6 +50,8 @@ export default function Game() {
       loadGameComponent();
     }
   }, [slug, game, isLoading]);
+
+  useDocumentTitle(`Memcaydia - ${game?.name}`, game?.name ? true : false);
 
   if (isLoading) {
     return (
