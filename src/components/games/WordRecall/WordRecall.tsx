@@ -1,6 +1,8 @@
 import React from "react";
 import { getRandomWord, words } from "./WordRecall.utils";
 import Button from "../../ui/Button";
+import { updateHighscores } from "../game.utils";
+import { useQueryClient } from "@tanstack/react-query";
 
 const GameOver = ({
   score,
@@ -29,6 +31,7 @@ export default function WordRecall() {
     getRandomWord(words, wordsSeen)
   );
   const [gameOver, setGameOver] = React.useState<boolean>(false);
+  const queryClient = useQueryClient();
 
   function resetGame() {
     setScore(0);
@@ -45,6 +48,8 @@ export default function WordRecall() {
 
     setScore((score) => score + 1);
     setCurrentWord(getRandomWord(words, wordsSeen));
+    updateHighscores("Word Recall", score + 1);
+    queryClient.invalidateQueries({ queryKey: ['highscores'] })
   }
 
   function handleNegativeAnswer() {
@@ -56,6 +61,8 @@ export default function WordRecall() {
     setScore((score) => score + 1);
     setCurrentWord(getRandomWord(words, wordsSeen));
     setWordsSeen((wordsSeen) => [...wordsSeen, currentWord]);
+    updateHighscores("Word Recall", score + 1);
+    queryClient.invalidateQueries({ queryKey: ['highscores'] })
   }
 
   return (

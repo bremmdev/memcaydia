@@ -18,3 +18,35 @@ export function generateRandomNumber(length: number) {
 
   return parseInt(rnd, 10);
 }
+
+export function updateHighscores(
+  gameName: string,
+  score: number,
+  minimum = false
+) {
+  const highscoresFromLocalStorage = JSON.parse(
+    localStorage.getItem("memcaydia_highscores") || "{}"
+  );
+
+  if (!highscoresFromLocalStorage[gameName]) {
+    highscoresFromLocalStorage[gameName] = score;
+  } else {
+    // Update the highscore if the new score is better (lower for reaction time, higher for the rest)
+    if (minimum) {
+      highscoresFromLocalStorage[gameName] = Math.min(
+        highscoresFromLocalStorage[gameName],
+        score
+      );
+    } else {
+      highscoresFromLocalStorage[gameName] = Math.max(
+        highscoresFromLocalStorage[gameName],
+        score
+      );
+    }
+  }
+
+  localStorage.setItem(
+    "memcaydia_highscores",
+    JSON.stringify(highscoresFromLocalStorage)
+  );
+}

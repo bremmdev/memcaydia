@@ -1,4 +1,5 @@
 import { Game } from "@/lib/types";
+import HighScore from "../HighScore";
 
 export default function GameHero({ game }: { game: Game }) {
   return (
@@ -15,6 +16,7 @@ export default function GameHero({ game }: { game: Game }) {
             alt={game.name}
           />
         </div>
+        <HighScore gameName={game.name} />
       </div>
     </section>
   );

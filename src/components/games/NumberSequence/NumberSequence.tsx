@@ -1,5 +1,5 @@
 import React from "react";
-import { generateRandomNumber } from "../game.utils";
+import { generateRandomNumber, updateHighscores } from "../game.utils";
 import Button from "../../ui/Button";
 import {
   NumberSequenceContext,
@@ -7,10 +7,13 @@ import {
   useNumberSequence,
 } from "./NumberSequenceContext";
 import { GameComponentType } from "@/lib/types";
+import { useQueryClient } from "@tanstack/react-query";
 
 const NumberInput = () => {
   const { number, level, setLevel, setTimeRemaining, setNumber, setGameOver } =
     useNumberSequence();
+
+  const queryClient = useQueryClient();
 
   function goToNextLevel() {
     const nextLevel = level + 1;
@@ -28,6 +31,8 @@ const NumberInput = () => {
 
     if (value === number.toString()) {
       goToNextLevel();
+      updateHighscores("Number Sequence", level);
+      queryClient.invalidateQueries({ queryKey: ['highscores'] })
     } else {
       setGameOver(true);
     }
