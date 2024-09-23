@@ -9,7 +9,7 @@ export default function Header() {
       <nav>
         <ul className="uppercase font-medium">
           <li>
-            <Link to="/highscore" className="hover:text-teal-200">
+            <Link to="/highscores" className="hover:text-teal-200">
               highscores
             </Link>
           </li>

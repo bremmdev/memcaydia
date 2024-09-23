@@ -1,5 +1,5 @@
 import { Game } from "@/lib/types";
-import Highscore from "@/components/highscores/HighScore";
+import Highscore from "@/components/highscores/Highscore";
 
 export default function GameHero({ game }: { game: Game }) {
   return (

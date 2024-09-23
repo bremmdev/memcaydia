@@ -1,7 +1,7 @@
 import { useHighscores } from "@/hooks/useHighscores";
 import HighscoreTooltip from "./HighscoreTooltip";
 
-export default function HighScore({ gameName }: { gameName: string }) {
+export default function Highscore({ gameName }: { gameName: string }) {
   
   const { data: highscores } = useHighscores();
 

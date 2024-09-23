@@ -24,7 +24,7 @@ function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<IndexPage />} />
-            <Route path="/highscore" element={<HighscorePage />} />
+            <Route path="/highscores" element={<HighscorePage />} />
             <Route path="/games/:slug" element={<GamePage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
