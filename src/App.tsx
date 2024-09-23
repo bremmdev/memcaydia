@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Layout from "@/components/layout/Layout";
 import IndexPage from "@/pages/IndexPage";
-import GamesPage from "@/pages/GamesPage";
+import HighscorePage from "@/pages/HighscorePage";
 import GamePage from "@/pages/GamePage";
 import NotFound from "@/components/ui/NotFound";
 
@@ -24,7 +24,7 @@ function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<IndexPage />} />
-            <Route path="/games" element={<GamesPage />} />
+            <Route path="/highscore" element={<HighscorePage />} />
             <Route path="/games/:slug" element={<GamePage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
