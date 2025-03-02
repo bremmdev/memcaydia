@@ -1,6 +1,6 @@
 import React from "react";
 import useScrollToTop from "@/hooks/useScrollToTop";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router";
 import { useGame } from "@/hooks/useGames";
 import type { Game, GameComponentType } from "@/lib/types";
 import Container from "@/components/layout/Container";

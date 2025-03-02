@@ -3,7 +3,7 @@ import { useHighscores } from "@/hooks/useHighscores";
 import useScrollToTop from "@/hooks/useScrollToTop";
 import Container from "@/components/layout/Container";
 import Spinner from "@/components/ui/Spinner";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { MoveLeft } from "lucide-react";
 
 export default function HighscorePage() {
