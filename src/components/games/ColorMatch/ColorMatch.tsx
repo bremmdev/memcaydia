@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { generateRandomColors } from "./ColorMatch.utils";
 import Button from "@/components/ui/Button";
 import { updateHighscores } from "../game.utils";
+import { useRevalidator } from "react-router";
 
 type baseProps = {
   color: string;
@@ -59,6 +60,8 @@ export default function ColorMatch() {
   const [level, setLevel] = React.useState<number>(1);
   const [gameOver, setGameOver] = React.useState<boolean>(false);
 
+  const revalidator = useRevalidator();
+
   function resetGame() {
     setLevel(1);
     setColors(generateRandomColors(1));
@@ -73,8 +76,15 @@ export default function ColorMatch() {
     const newLevel = level + 1;
     setLevel(newLevel);
     setColors(generateRandomColors(newLevel));
-    updateHighscores("Color Match", level);
   }
+
+  React.useEffect(() => {
+    if(!gameOver) return
+    updateHighscores("Color Match", level - 1);
+    //revalidate so highscore gets refetched
+    revalidator.revalidate();
+     /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  }, [gameOver])
 
   return (
     <section className="flex items-center flex-col gap-8">

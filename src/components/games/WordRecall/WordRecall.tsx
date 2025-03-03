@@ -2,6 +2,7 @@ import React from "react";
 import { getRandomWord, words } from "./WordRecall.utils";
 import Button from "../../ui/Button";
 import { updateHighscores } from "../game.utils";
+import { useRevalidator } from "react-router";
 
 const GameOver = ({
   score,
@@ -31,6 +32,8 @@ export default function WordRecall() {
   );
   const [gameOver, setGameOver] = React.useState<boolean>(false);
 
+  const revalidator = useRevalidator();
+
   function resetGame() {
     setScore(0);
     setWordsSeen([]);
@@ -58,8 +61,15 @@ export default function WordRecall() {
     setScore((score) => score + 1);
     setCurrentWord(getRandomWord(words, wordsSeen));
     setWordsSeen((wordsSeen) => [...wordsSeen, currentWord]);
-    updateHighscores("Word Recall", score + 1);
   }
+
+  React.useEffect(() => {
+    if (!gameOver) return;
+    updateHighscores("Word Recall", score);
+    //revalidate so highscore gets refetched
+    revalidator.revalidate();
+     /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  }, [gameOver]);
 
   return (
     <div className="text-center mx-auto space-y-6">
@@ -71,7 +81,7 @@ export default function WordRecall() {
             Current score: {score}
           </span>
 
-          <p>Have you seen this word before?</p>
+          <p className="mt-4">Have you seen this word before?</p>
           <span className="text-2xl sm:text-3xl text-primary-teal font-medium block my-4">
             {currentWord}
           </span>

@@ -1,6 +1,5 @@
 import useScrollToTop from "@/hooks/useScrollToTop";
 import Container from "@/components/layout/Container";
-import Spinner from "@/components/ui/Spinner";
 import { Link, useLoaderData } from "react-router";
 import { MoveLeft } from "lucide-react";
 import type { Game } from "@/lib/types";
@@ -9,14 +8,6 @@ export default function HighscorePage() {
   useScrollToTop();
 
   const { games, highscores } = useLoaderData<{games: Game[], highscores: Record<string, number>}>();
-
-  // if (loadingGames || loadingHighscores) {
-  //   return (
-  //     <Container>
-  //       <Spinner />
-  //     </Container>
-  //   );
-  // }
 
   const gamesWithHighscores = games?.map((game) => {
     const highscore = highscores![game.name] || "N/A";

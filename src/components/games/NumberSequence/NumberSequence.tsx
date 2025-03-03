@@ -7,6 +7,7 @@ import {
   useNumberSequence,
 } from "./NumberSequenceContext";
 import { GameComponentType } from "@/lib/types";
+import { useRevalidator } from "react-router";
 
 const NumberInput = () => {
   const { number, level, setLevel, setTimeRemaining, setNumber, setGameOver } =
@@ -28,7 +29,6 @@ const NumberInput = () => {
 
     if (value === number.toString()) {
       goToNextLevel();
-      updateHighscores("Number Sequence", level);
     } else {
       setGameOver(true);
     }
@@ -72,8 +72,14 @@ const ProgressBar = () => {
 };
 
 const GameOver = () => {
-  const { level, setLevel, setNumber, setGameOver, setTimeRemaining } =
-    useNumberSequence();
+  const {
+    gameOver,
+    level,
+    setLevel,
+    setNumber,
+    setGameOver,
+    setTimeRemaining,
+  } = useNumberSequence();
 
   function resetGame() {
     setLevel(1);
@@ -81,6 +87,16 @@ const GameOver = () => {
     setNumber(generateRandomNumber(1));
     setGameOver(false);
   }
+
+  const revalidator = useRevalidator();
+
+  React.useEffect(() => {
+    if (!gameOver) return;
+    updateHighscores("Number Sequence", level - 1);
+    //revalidate so highscore gets refetched
+    revalidator.revalidate();
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  }, [gameOver]);
 
   return (
     <div className="text-center mx-auto space-y-6">
@@ -95,7 +111,7 @@ const GameOver = () => {
   );
 };
 
-export default function NumberSequence({isPlaying}: GameComponentType) {
+export default function NumberSequence({ isPlaying }: GameComponentType) {
   const [timeRemaining, setTimeRemaining] = React.useState<number>(TOTAL_TIME);
   const [number, setNumber] = React.useState(
     React.useMemo(() => generateRandomNumber(1), [])

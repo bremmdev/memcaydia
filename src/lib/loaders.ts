@@ -1,5 +1,6 @@
 import type { Game } from "@/lib/types";
 import { slugify } from "@/lib/utils";
+import React from "react";
 
 async function getGames() {
   const response = await fetch("/api/games");
@@ -21,7 +22,14 @@ export async function gameRouteLoader(slug?: string) {
   const games = (await getGames()) as Array<Game> | undefined;
   const game = games?.find((game) => slugify(game.name) === slug);
   const highscoresFromLocalStorage = getHighscores();
-  return { game, highscores: highscoresFromLocalStorage };
+  const unsluggedGameName = game?.name.replace(/ /g, "");
+  const gameComponent = React.lazy(() => 
+    import(
+      `../components/games/${unsluggedGameName}/${unsluggedGameName}.tsx`
+    )
+  );
+
+  return { game, highscores: highscoresFromLocalStorage, gameComponent };
 }
 
 export async function highscoreRouteLoader() {

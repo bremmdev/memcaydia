@@ -2,6 +2,7 @@ import React from "react";
 import Button from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { updateHighscores } from "../game.utils";
+import { useRevalidator } from "react-router";
 
 const Result = ({
   reactionTimes,
@@ -13,9 +14,13 @@ const Result = ({
   const averageTime =
     reactionTimes.reduce((acc, time) => acc + time, 0) / reactionTimes.length;
 
+  const revalidator = useRevalidator(); 
 
   React.useEffect(() => {
     updateHighscores("Reaction Time", Math.round(averageTime), true);
+    //revalidate so highscore gets refetched
+    revalidator.revalidate();
+     /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [averageTime]);
 
   return (
