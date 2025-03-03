@@ -4,7 +4,7 @@ import { Link, useLoaderData } from "react-router";
 import { MoveLeft } from "lucide-react";
 import type { Game } from "@/lib/types";
 
-export default function HighscorePage() {
+function HighscorePage() {
   useScrollToTop();
 
   const { games, highscores } = useLoaderData<{games: Game[], highscores: Record<string, number>}>();
@@ -48,3 +48,5 @@ export default function HighscorePage() {
     </Container>
   );
 }
+
+export const Component = HighscorePage;

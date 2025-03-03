@@ -1,7 +1,6 @@
 import { RouterProvider, createBrowserRouter } from "react-router";
 import Layout from "@/components/layout/Layout";
 import IndexPage from "@/pages/IndexPage";
-import HighscorePage from "@/pages/HighscorePage";
 import GamePage from "@/pages/GamePage";
 import NotFound from "@/components/ui/NotFound";
 import { indexRouteLoader, gameRouteLoader, highscoreRouteLoader } from "./lib/loaders";
@@ -17,15 +16,15 @@ const router = createBrowserRouter([
         loader: indexRouteLoader,
       },
       {
-        path: "/highscores",
-        element: <HighscorePage />,
-        loader: highscoreRouteLoader
-      },
-      {
         path: "/games/:slug",
         element: <GamePage />,
         errorElement: <NotFound />,
         loader: ({ params }) => gameRouteLoader(params.slug),
+      },
+      {
+        path: "/highscores",
+        loader: highscoreRouteLoader,
+        lazy: () => import('./pages/HighscorePage.tsx')
       },
       {
         path: "*",
