@@ -7,13 +7,10 @@ import {
   useNumberSequence,
 } from "./NumberSequenceContext";
 import { GameComponentType } from "@/lib/types";
-import { useQueryClient } from "@tanstack/react-query";
 
 const NumberInput = () => {
   const { number, level, setLevel, setTimeRemaining, setNumber, setGameOver } =
     useNumberSequence();
-
-  const queryClient = useQueryClient();
 
   function goToNextLevel() {
     const nextLevel = level + 1;
@@ -32,7 +29,6 @@ const NumberInput = () => {
     if (value === number.toString()) {
       goToNextLevel();
       updateHighscores("Number Sequence", level);
-      queryClient.invalidateQueries({ queryKey: ['highscores'] })
     } else {
       setGameOver(true);
     }
@@ -140,7 +136,7 @@ export default function NumberSequence({isPlaying}: GameComponentType) {
           <span className="text-3xl text-primary-teal font-medium">
             Level: {level}
           </span>
-          <p>
+          <p className="my-4">
             Remember the following number:
             <span className="text-2xl sm:text-3xl text-primary-teal font-medium block my-4">
               {number}

@@ -1,9 +1,9 @@
-import { useHighscores } from "@/hooks/useHighscores";
 import HighscoreTooltip from "./HighscoreTooltip";
+import { useLoaderData } from "react-router";
 
 export default function Highscore({ gameName }: { gameName: string }) {
   
-  const { data: highscores } = useHighscores();
+  const { highscores } = useLoaderData()
 
   const highscore = (highscores && highscores[gameName]) || "N/A";
 

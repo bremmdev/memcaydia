@@ -1,7 +1,6 @@
 import React from "react";
 import useScrollToTop from "@/hooks/useScrollToTop";
-import { useParams, Link } from "react-router";
-import { useGame } from "@/hooks/useGames";
+import { Link, useLoaderData } from "react-router";
 import type { Game, GameComponentType } from "@/lib/types";
 import Container from "@/components/layout/Container";
 import GameHero from "@/components/games/GameHero";
@@ -25,8 +24,7 @@ function gameLoader(game?: Game) {
 export default function Game() {
   useScrollToTop();
 
-  const { slug } = useParams();
-  const { data: game, isLoading } = useGame(slug as string);
+  const { game } = useLoaderData();
 
   const [isPlaying, setIsPlaying] = React.useState(false);
 
@@ -45,23 +43,23 @@ export default function Game() {
     };
 
     //dynamically import the game component when data is loaded
-    if (!isLoading && game) {
+    if (game) {
       loadGameComponent();
     }
-  }, [slug, game, isLoading]);
+  }, [game]);
 
   useDocumentTitle(`Memcaydia - ${game?.name}`, game?.name ? true : false);
 
-  if (isLoading) {
-    return (
-      <Container>
-        <Spinner />
-      </Container>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <Container>
+  //       <Spinner />
+  //     </Container>
+  //   );
+  // }
 
   //if the slug does not match any game, return a not found message
-  if (!isLoading && !game) {
+  if (!game) {
     throw new Error('Game not found')
   }
 

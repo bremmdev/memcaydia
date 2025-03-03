@@ -2,7 +2,6 @@ import React from "react";
 import Button from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { updateHighscores } from "../game.utils";
-import { useQueryClient } from "@tanstack/react-query";
 
 const Result = ({
   reactionTimes,
@@ -14,12 +13,10 @@ const Result = ({
   const averageTime =
     reactionTimes.reduce((acc, time) => acc + time, 0) / reactionTimes.length;
 
-  const queryClient = useQueryClient();
 
   React.useEffect(() => {
     updateHighscores("Reaction Time", Math.round(averageTime), true);
-    queryClient.invalidateQueries({ queryKey: ['highscores'] })
-  }, [averageTime, queryClient]);
+  }, [averageTime]);
 
   return (
     <div className="space-y-4">

@@ -1,29 +1,29 @@
-import { useGames } from "@/hooks/useGames";
-import { Link } from "react-router";
+import { Link, useLoaderData } from "react-router";
 // import { MoveRight } from "lucide-react";
 import Spinner from "../ui/Spinner";
 import { slugify } from "@/lib/utils";
+import { Game } from "@/lib/types";
 
 export default function GamesList() {
-  const { data: games, isLoading, error } = useGames();
+  const games = useLoaderData<Game[]>();
 
-  const showSpinner = isLoading || !games;
+  // const showSpinner = isLoading || !games;
 
   let content = null;
 
-  if (error) {
-    content = (
-      <p className="text-rose-600 text-center font-medium">
-        Could not get games from server
-      </p>
-    );
-  }
+  // if (error) {
+  //   content = (
+  //     <p className="text-rose-600 text-center font-medium">
+  //       Could not get games from server
+  //     </p>
+  //   );
+  // }
 
-  if (showSpinner && !error) {
-    content = <Spinner />;
-  }
+  // if (showSpinner && !error) {
+  //   content = <Spinner />;
+  // }
 
-  if (!showSpinner && !error) {
+  // if (!showSpinner && !error) {
     content = (
       <div className="text-slate-900 grid gap-8 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
         {games.slice(0, 4).map((game) => (
@@ -53,7 +53,7 @@ export default function GamesList() {
         ))}
       </div>
     );
-  }
+  // }
 
   return (
     <section className="space-y-12 md:space-y-16">

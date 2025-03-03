@@ -3,7 +3,6 @@ import { cn } from "@/lib/utils";
 import { generateRandomColors } from "./ColorMatch.utils";
 import Button from "@/components/ui/Button";
 import { updateHighscores } from "../game.utils";
-import { useQueryClient } from "@tanstack/react-query";
 
 type baseProps = {
   color: string;
@@ -60,8 +59,6 @@ export default function ColorMatch() {
   const [level, setLevel] = React.useState<number>(1);
   const [gameOver, setGameOver] = React.useState<boolean>(false);
 
-  const queryClient = useQueryClient();
-
   function resetGame() {
     setLevel(1);
     setColors(generateRandomColors(1));
@@ -77,7 +74,6 @@ export default function ColorMatch() {
     setLevel(newLevel);
     setColors(generateRandomColors(newLevel));
     updateHighscores("Color Match", level);
-    queryClient.invalidateQueries({ queryKey: ['highscores'] })
   }
 
   return (

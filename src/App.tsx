@@ -1,21 +1,10 @@
 import { RouterProvider, createBrowserRouter } from "react-router";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Layout from "@/components/layout/Layout";
 import IndexPage from "@/pages/IndexPage";
 import HighscorePage from "@/pages/HighscorePage";
 import GamePage from "@/pages/GamePage";
 import NotFound from "@/components/ui/NotFound";
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 60, // 60 minutes
-      gcTime: 1000 * 60 * 60, // 60 minutes
-      retry: 1,
-    },
-  },
-});
+import { indexRouteLoader, gameRouteLoader, highscoreRouteLoader } from "./lib/loaders";
 
 const router = createBrowserRouter([
   {
@@ -25,15 +14,18 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <IndexPage />,
+        loader: indexRouteLoader,
       },
       {
         path: "/highscores",
         element: <HighscorePage />,
+        loader: highscoreRouteLoader
       },
       {
         path: "/games/:slug",
         element: <GamePage />,
-        errorElement: <NotFound />
+        errorElement: <NotFound />,
+        loader: ({ params }) => gameRouteLoader(params.slug),
       },
       {
         path: "*",
@@ -44,12 +36,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
