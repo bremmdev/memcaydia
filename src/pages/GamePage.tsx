@@ -5,7 +5,6 @@ import { useGame } from "@/hooks/useGames";
 import type { Game, GameComponentType } from "@/lib/types";
 import Container from "@/components/layout/Container";
 import GameHero from "@/components/games/GameHero";
-import NotFound from "@/components/ui/NotFound";
 import Spinner from "@/components/ui/Spinner";
 import Button from "@/components/ui/Button";
 import { MoveLeft } from "lucide-react";
@@ -63,7 +62,7 @@ export default function Game() {
 
   //if the slug does not match any game, return a not found message
   if (!isLoading && !game) {
-    return <NotFound />;
+    throw new Error('Game not found')
   }
 
   return (

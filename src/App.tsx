@@ -33,6 +33,7 @@ const router = createBrowserRouter([
       {
         path: "/games/:slug",
         element: <GamePage />,
+        errorElement: <NotFound />
       },
       {
         path: "*",
