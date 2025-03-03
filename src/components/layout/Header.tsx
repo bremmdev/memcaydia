@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { NavLink, Link } from "react-router";
 
 export default function Header() {
   return (
@@ -9,9 +9,9 @@ export default function Header() {
       <nav>
         <ul className="uppercase font-medium">
           <li>
-            <Link to="/highscores" className="hover:text-teal-200">
+            <NavLink to="/highscores" className={({isActive}) => isActive ? "text-teal-200" : "hover:text-teal-200"}>
               highscores
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </nav>
