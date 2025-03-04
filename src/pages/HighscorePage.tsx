@@ -24,7 +24,7 @@ function HighscorePage() {
           <MoveLeft className="size-5" />
           Back
         </Link>
-        <h1 className="max-sm:mt-6 text-2xl sm:text-3xl tracking-wide font-bold text-center text-primary-teal">
+        <h1 className="max-sm:mt-6 w-fit mx-auto sm:translate-y-1.5 text-2xl sm:text-3xl tracking-wide font-bold text-center text-primary-teal">
           Highscores
         </h1>
       </div>
