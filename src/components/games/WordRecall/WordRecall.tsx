@@ -49,7 +49,6 @@ export default function WordRecall() {
 
     setScore((score) => score + 1);
     setCurrentWord(getRandomWord(words, wordsSeen));
-    updateHighscores("Word Recall", score + 1);
   }
 
   function handleNegativeAnswer() {

@@ -11,7 +11,7 @@ export default function GamesList() {
         Enhance your brain health through fun and engaging memory games
       </h2>
       <div className="text-slate-900 grid gap-8 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
-        {games.slice(0, 4).map((game) => (
+        {games.map((game) => (
           <Link
             to={`/games/${slugify(game.name)}`}
             className="group"
