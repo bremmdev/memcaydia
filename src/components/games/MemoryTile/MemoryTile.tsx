@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "@/components/ui/Button";
+import GameOver from "@/components/shared/GameOver";
 import { cn } from "@/lib/utils";
 import { updateHighscores } from "@/components/games/game.utils";
 import { useRevalidator } from "react-router";
@@ -15,26 +15,6 @@ function generateRandomTiles(level: number) {
 
   return highlightedTiles;
 }
-
-const GameOver = ({
-  score,
-  onRestart,
-}: {
-  score: number;
-  onRestart: () => void;
-}) => {
-  return (
-    <div className="text-center mx-auto space-y-6">
-      <h2 className="text-2xl sm:text-3xl font-mediun text-primary-teal font-medium">
-        Game Over
-      </h2>
-      <p className="text-lg">
-        Your final score is <span className="font-medium">{score}</span>
-      </p>
-      <Button onClick={onRestart}>Play again</Button>
-    </div>
-  );
-};
 
 const Tile = ({
   isHighlighted,

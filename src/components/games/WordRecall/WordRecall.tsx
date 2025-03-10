@@ -3,26 +3,7 @@ import { getRandomWord, words } from "./WordRecall.utils";
 import Button from "../../ui/Button";
 import { updateHighscores } from "../game.utils";
 import { useRevalidator } from "react-router";
-
-const GameOver = ({
-  score,
-  onRestart,
-}: {
-  score: number;
-  onRestart: () => void;
-}) => {
-  return (
-    <div className="text-center mx-auto space-y-6">
-      <h2 className="text-2xl sm:text-3xl font-mediun text-primary-teal font-medium">
-        Game Over
-      </h2>
-      <p className="text-lg">
-        Your final score is <span className="font-medium">{score}</span>
-      </p>
-      <Button onClick={onRestart}>Play again</Button>
-    </div>
-  );
-};
+import GameOver from "../../shared/GameOver";
 
 export default function WordRecall() {
   const [score, setScore] = React.useState<number>(0);

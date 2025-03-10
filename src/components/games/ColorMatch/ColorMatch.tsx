@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { generateRandomColors } from "./ColorMatch.utils";
-import Button from "@/components/ui/Button";
+import GameOver from "@/components/shared/GameOver";
 import { updateHighscores } from "../game.utils";
 import { useRevalidator } from "react-router";
 
@@ -30,26 +30,6 @@ const Color = ({ color, clickable = false, onChoice }: ColorProps) => {
       onClick={() => clickable && onChoice && onChoice(color)}
       style={{ backgroundColor: color }}
     ></Component>
-  );
-};
-
-const GameOver = ({
-  level,
-  onRestart,
-}: {
-  level: number;
-  onRestart: () => void;
-}) => {
-  return (
-    <div className="text-center mx-auto space-y-6">
-      <h2 className="text-2xl sm:text-3xl font-mediun text-primary-teal font-medium">
-        Game Over
-      </h2>
-      <p className="text-lg">
-        Your final score is <span className="font-medium">{level - 1}</span>
-      </p>
-      <Button onClick={onRestart}>Play again</Button>
-    </div>
   );
 };
 
@@ -89,7 +69,7 @@ export default function ColorMatch() {
   return (
     <section className="flex items-center flex-col gap-8">
       {gameOver ? (
-        <GameOver onRestart={resetGame} level={level} />
+        <GameOver onRestart={resetGame} score={level - 1} />
       ) : (
         <>
           <span className="text-3xl text-primary-teal font-medium">

@@ -8,6 +8,7 @@ import {
 } from "./NumberSequenceContext";
 import { GameComponentType } from "@/lib/types";
 import { useRevalidator } from "react-router";
+import GameOver from "@/components/shared/GameOver";
 
 const NumberInput = () => {
   const { number, level, setLevel, setTimeRemaining, setNumber, setGameOver } =
@@ -71,7 +72,7 @@ const ProgressBar = () => {
   );
 };
 
-const GameOver = () => {
+const GameOverComp = () => {
   const {
     gameOver,
     level,
@@ -98,17 +99,7 @@ const GameOver = () => {
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [gameOver]);
 
-  return (
-    <div className="text-center mx-auto space-y-6">
-      <h2 className="text-2xl sm:text-3xl font-mediun text-primary-teal font-medium">
-        Game Over
-      </h2>
-      <p className="text-lg">
-        Your final score is <span className="font-medium">{level - 1}</span>
-      </p>
-      <Button onClick={resetGame}>Play again</Button>
-    </div>
-  );
+  return <GameOver score={level - 1} onRestart={resetGame} />;
 };
 
 export default function NumberSequence({ isPlaying }: GameComponentType) {
@@ -146,7 +137,7 @@ export default function NumberSequence({ isPlaying }: GameComponentType) {
         setGameOver,
       }}
     >
-      {gameOver && <GameOver />}
+      {gameOver && <GameOverComp />}
       {!gameOver && timeRemaining > 0 && (
         <div className="text-center mx-auto space-y-6">
           <span className="text-3xl text-primary-teal font-medium">
