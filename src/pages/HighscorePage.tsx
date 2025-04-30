@@ -20,6 +20,7 @@ function HighscorePage() {
         <Link
           to="/"
           className="sm:absolute sm:left-0 flex text-primary-teal justify-center gap-2 items-center border border-primary-teal px-4 py-2 w-fit rounded-md font-medium uppercase hover:bg-primary-teal/10"
+          viewTransition
         >
           <MoveLeft className="size-5" />
           Back

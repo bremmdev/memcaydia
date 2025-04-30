@@ -12,6 +12,7 @@ export default function NotFound() {
       <Link
         to="/"
         className="text-white flex justify-center gap-2 items-center bg-primary-teal px-4 py-2 w-fit rounded-md font-medium uppercase hover:bg-opacity-90 mx-auto"
+        viewTransition
       >
         Home
       </Link>

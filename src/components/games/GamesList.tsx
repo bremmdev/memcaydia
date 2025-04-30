@@ -17,6 +17,7 @@ export default function GamesList() {
             className="group"
             key={game.id}
             aria-label={`${game.name} game`}
+            viewTransition
           >
             <div
               key={game.id}
@@ -28,7 +29,14 @@ export default function GamesList() {
                 className="max-h-56 w-full"
               />
               <div className="p-6 border border-teal-500 border-t-0 rounded-b-md space-y-3 group-hover:border-primary-teal">
-                <h3 className="text-primary-teal text-lg font-medium uppercase">
+                <h3
+                  className="text-primary-teal text-lg font-medium uppercase"
+                  style={{
+                    viewTransitionName: `card-${game.name
+                      .replace(" ", "")
+                      .toLowerCase()}`,
+                  }}
+                >
                   {game.name}
                 </h3>
                 <p className="line-clamp-4">{game.description}</p>

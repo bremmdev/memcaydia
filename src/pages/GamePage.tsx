@@ -35,6 +35,7 @@ export default function Game() {
           <Link
             to="/"
             className="flex text-primary-teal justify-center gap-2 items-center border border-primary-teal px-4 py-2 w-fit rounded-md font-medium uppercase hover:bg-primary-teal/10 -mt-6"
+            viewTransition
           >
             <MoveLeft className="size-5" />
             Back

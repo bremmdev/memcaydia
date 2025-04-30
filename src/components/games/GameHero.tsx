@@ -3,7 +3,12 @@ import Highscore from "@/components/highscores/Highscore";
 
 export default function GameHero({ game }: { game: Game }) {
   return (
-    <section className="text-slate-900 relative bg-primary-teal/5 rounded-md flex items-center flex-col p-8 md:p-12">
+    <section
+      className="text-slate-900 relative bg-primary-teal/5 rounded-md flex items-center flex-col p-8 md:p-12"
+      style={{
+        viewTransitionName: `card-${game.name.replace(" ", "").toLowerCase()}`,
+      }}
+    >
       <div className="max-w-4xl mx-auto space-y-6">
         <h1 className="text-2xl sm:text-3xl tracking-wide font-bold text-center text-primary-teal">
           {game?.name}
