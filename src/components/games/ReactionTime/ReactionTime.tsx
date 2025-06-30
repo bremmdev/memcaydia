@@ -44,29 +44,28 @@ const F1Lights = ({
   setCountingDown: React.Dispatch<React.SetStateAction<boolean>>;
   clearLights: boolean;
 }) => {
-  const [activeLights, setActiveLights] = React.useState<number[]>([0]);
-  const intervalRef = React.useRef<NodeJS.Timeout | null>(null);
-
+  const [lightCount, setLightCount] = React.useState<number>(0);
+  const intervalRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
   React.useEffect(() => {
     if (!countingDown) return;
 
     intervalRef.current = setInterval(() => {
-      setActiveLights((prev) => {
-        const nextLight = (prev[prev.length - 1] + 1) % 5;
-        return [...prev, nextLight];
-      });
+      setLightCount((prevCount) => prevCount + 1);
     }, 1000);
-
-    return () => clearInterval(intervalRef.current!);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, [countingDown]);
 
   // Clear the interval if the active lights reach 5
   React.useEffect(() => {
-    if (activeLights.length >= 5) {
+    if (lightCount === 5) {
       clearInterval(intervalRef.current!);
       setCountingDown(false);
     }
-  }, [activeLights.length, setCountingDown]);
+  }, [lightCount, setCountingDown]);
 
   return (
     <div className="flex items-center justify-center gap-4 mb-6">
@@ -82,7 +81,7 @@ const F1Lights = ({
             <span
               className={cn(
                 "block w-8 h-8 rounded-full transition-colors duration-200",
-                activeLights.includes(i) && !clearLights
+                i < lightCount && !clearLights
                   ? "bg-red-500 shadow-lg shadow-red-500/50"
                   : "bg-gray-700"
               )}
