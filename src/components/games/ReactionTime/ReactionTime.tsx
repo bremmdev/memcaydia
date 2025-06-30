@@ -5,45 +5,30 @@ import { updateHighscores } from "../game.utils";
 import { useRevalidator } from "react-router";
 
 const Result = ({
-  reactionTimes,
+  reactionTime,
   onReset,
 }: {
-  reactionTimes: number[];
+  reactionTime: number;
   onReset: () => void;
 }) => {
-  const averageTime =
-    reactionTimes.reduce((acc, time) => acc + time, 0) / reactionTimes.length;
-
-  const revalidator = useRevalidator(); 
+  const revalidator = useRevalidator();
 
   React.useEffect(() => {
-    updateHighscores("Reaction Time", Math.round(averageTime), true);
+    updateHighscores("Reaction Time", Math.round(reactionTime), true);
     //revalidate so highscore gets refetched
     revalidator.revalidate();
-     /* eslint-disable-next-line react-hooks/exhaustive-deps */
-  }, [averageTime]);
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  }, [reactionTime]);
 
   return (
-    <div className="space-y-4">
+    <div>
       <p className="flex space-between gap-4">
-        Average reaction time:
+        Your reaction time:
         <span className="font-bold text-primary-teal ml-auto">
-          {Math.round(averageTime)}ms
+          {Math.round(reactionTime)}ms
         </span>
       </p>
-      <p className="flex space-between gap-4">
-        Fastest reaction time:
-        <span className="font-bold text-primary-teal ml-auto">
-          {Math.min(...reactionTimes)}ms
-        </span>
-      </p>
-      <p className="flex space-between gap-4">
-        Slowest reaction time:
-        <span className="font-bold text-primary-teal ml-auto">
-          {Math.max(...reactionTimes)}ms
-        </span>
-      </p>
-      <Button className="my-16" onClick={onReset}>
+      <Button className="my-6" onClick={onReset}>
         Play again
       </Button>
     </div>
@@ -52,18 +37,20 @@ const Result = ({
 
 export default function ReactionTime() {
   const [showSquare, setShowSquare] = React.useState(false);
-  const [reactionTimes, setReactionTimes] = React.useState<number[]>([]);
+  const [reactionTime, setReactionTime] = React.useState<number | undefined>(
+    undefined
+  );
   const [timeStamp, setTimeStamp] = React.useState<number>(0);
 
   function handleReactionClick() {
     const reactionTime = Date.now() - timeStamp;
-    setReactionTimes((prev) => [...prev, reactionTime]);
+    setReactionTime(reactionTime);
     setShowSquare(false);
   }
 
   function resetGame() {
     setShowSquare(false);
-    setReactionTimes([]);
+    setReactionTime(undefined);
     setTimeStamp(0);
   }
 
@@ -79,12 +66,12 @@ export default function ReactionTime() {
     return () => clearTimeout(timeout);
   }, [showSquare]);
 
-  const showResult = reactionTimes.length === 5;
+  const showResult = reactionTime !== undefined;
 
   return (
     <div className="flex items-center flex-col gap-12">
       {showResult ? (
-        <Result reactionTimes={reactionTimes} onReset={resetGame} />
+        <Result reactionTime={reactionTime} onReset={resetGame} />
       ) : (
         <>
           <p>
@@ -93,7 +80,7 @@ export default function ReactionTime() {
           </p>
           <button
             className={cn(
-              "size-24 inline-block rotate-45 bg-primary-teal opacity-25 rounded-lg",
+              "size-24 inline-block rotate-45 bg-primary-teal opacity-25 rounded-lg my-2",
               {
                 "opacity-100 cursor-pointer": showSquare,
               }
