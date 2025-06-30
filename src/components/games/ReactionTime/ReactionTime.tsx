@@ -3,6 +3,7 @@ import Button from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { updateHighscores } from "../game.utils";
 import { useRevalidator } from "react-router";
+import F1Beep from "@/assets/f1beep.mp3";
 
 const Result = ({
   reactionTime,
@@ -51,6 +52,8 @@ const F1Lights = ({
 
     intervalRef.current = setInterval(() => {
       setLightCount((prevCount) => prevCount + 1);
+      const beep = new Audio(F1Beep);
+      beep.play();
     }, 1000);
     return () => {
       if (intervalRef.current) {
