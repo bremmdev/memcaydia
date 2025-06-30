@@ -35,8 +35,68 @@ const Result = ({
   );
 };
 
+const F1Lights = ({
+  countingDown,
+  setCountingDown,
+  clearLights,
+}: {
+  countingDown: boolean;
+  setCountingDown: React.Dispatch<React.SetStateAction<boolean>>;
+  clearLights: boolean;
+}) => {
+  const [activeLights, setActiveLights] = React.useState<number[]>([0]);
+  const intervalRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  React.useEffect(() => {
+    if (!countingDown) return;
+
+    intervalRef.current = setInterval(() => {
+      setActiveLights((prev) => {
+        const nextLight = (prev[prev.length - 1] + 1) % 5;
+        return [...prev, nextLight];
+      });
+    }, 1000);
+
+    return () => clearInterval(intervalRef.current!);
+  }, [countingDown]);
+
+  // Clear the interval if the active lights reach 5
+  React.useEffect(() => {
+    if (activeLights.length >= 5) {
+      clearInterval(intervalRef.current!);
+      setCountingDown(false);
+    }
+  }, [activeLights.length, setCountingDown]);
+
+  return (
+    <div className="flex items-center justify-center gap-4 mb-6">
+      {Array.from({ length: 5 }, (_, i) => (
+        <div key={i} className="flex items-center justify-center">
+          <div
+            className={cn(
+              "w-12 h-24 bg-black rounded-lg flex flex-col items-center justify-center gap-2",
+              ""
+            )}
+          >
+            <span className="block w-8 h-8 bg-slate-700 rounded-full"></span>
+            <span
+              className={cn(
+                "block w-8 h-8 rounded-full transition-colors duration-200",
+                activeLights.includes(i) && !clearLights
+                  ? "bg-red-500 shadow-lg shadow-red-500/50"
+                  : "bg-gray-700"
+              )}
+            ></span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 export default function ReactionTime() {
-  const [showSquare, setShowSquare] = React.useState(false);
+  const [countingDown, setCountingDown] = React.useState(true);
+  const [clearLights, setClearLights] = React.useState(false);
   const [reactionTime, setReactionTime] = React.useState<number | undefined>(
     undefined
   );
@@ -45,26 +105,27 @@ export default function ReactionTime() {
   function handleReactionClick() {
     const reactionTime = Date.now() - timeStamp;
     setReactionTime(reactionTime);
-    setShowSquare(false);
   }
 
   function resetGame() {
-    setShowSquare(false);
+    setCountingDown(true);
+    setClearLights(false);
     setReactionTime(undefined);
     setTimeStamp(0);
   }
 
+  // Random time between 2 and 5 seconds before the lights go out
   React.useEffect(() => {
-    if (showSquare) return;
+    if (countingDown) return;
 
     //random time between 2 and 5 seconds
     const timeout = setTimeout(() => {
-      setShowSquare(true);
+      setClearLights(true);
       setTimeStamp(Date.now());
     }, Math.floor(Math.random() * 3000) + 2000);
 
     return () => clearTimeout(timeout);
-  }, [showSquare]);
+  }, [countingDown]);
 
   const showResult = reactionTime !== undefined;
 
@@ -74,18 +135,20 @@ export default function ReactionTime() {
         <Result reactionTime={reactionTime} onReset={resetGame} />
       ) : (
         <>
-          <p>
-            Click the figure as soon as it becomes{" "}
-            <span className="font-bold text-primary-teal">dark green</span>
-          </p>
+          <p>Click the figure as soon as the lights go out!</p>
+          <F1Lights
+            countingDown={countingDown}
+            setCountingDown={setCountingDown}
+            clearLights={clearLights}
+          />
           <button
             className={cn(
               "size-24 inline-block rotate-45 bg-primary-teal opacity-25 rounded-lg my-2",
               {
-                "opacity-100 cursor-pointer": showSquare,
+                "opacity-100 cursor-pointer": clearLights,
               }
             )}
-            disabled={!showSquare}
+            disabled={!clearLights}
             onClick={handleReactionClick}
           ></button>
         </>
