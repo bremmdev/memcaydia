@@ -7,6 +7,6 @@
       "exclude": ["*.{svg,png,jpg,gif,webp}","*.{css}","*.js"]
   },
   "platform": {
-    "apiRuntime": "node:20" 
+    "apiRuntime": "node:22" 
   }
 }

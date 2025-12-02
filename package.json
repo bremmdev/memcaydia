@@ -11,7 +11,7 @@
     "swa": "cd api && tsc && cd .. && swa start http://localhost:5173 --api-location api"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=24.0.0"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.9",
