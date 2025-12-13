@@ -1,4 +1,4 @@
-export const TOTAL_TIME = 20;
+export const TOTAL_TIME = 60;
 
 export function generateRandomWords(count: number, wordList: string[]) {
   const randomWords: string[] = [];
