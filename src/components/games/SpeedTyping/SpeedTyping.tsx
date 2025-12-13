@@ -2,6 +2,8 @@ import { words } from "./words";
 import { generateRandomWords, TOTAL_TIME } from "./SpeedTyping.utils";
 import React from "react";
 import { calculateScore } from "./SpeedTyping.utils";
+import { updateHighscores } from "../game.utils";
+import { useRevalidator } from "react-router";
 
 export default function SpeedTyping() {
   const [randomWords, setRandomWords] = React.useState<string[]>(() =>
@@ -15,6 +17,8 @@ export default function SpeedTyping() {
   >([]);
   const [WPM, setWPM] = React.useState(0);
   const textareRef = React.useRef<HTMLTextAreaElement>(null);
+
+  const revalidator = useRevalidator();
 
   function handleTyping(event: React.FormEvent<HTMLTextAreaElement>) {
     if (!timerStarted) {
@@ -31,6 +35,9 @@ export default function SpeedTyping() {
     );
     setWPM(wpm);
     setCorrectWordsIndexes(correctWordsByIndex);
+    updateHighscores("Speed Typing", wpm);
+    //revalidate so highscore gets refetched
+    revalidator.revalidate();
   }
 
   function resetGame() {
