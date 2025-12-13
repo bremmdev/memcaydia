@@ -1,13 +1,20 @@
 import { words } from "./words";
 import { generateRandomWords, TOTAL_TIME } from "./SpeedTyping.utils";
 import React from "react";
+import { calculateScore } from "./SpeedTyping.utils";
 
 export default function SpeedTyping() {
-  const randomWords = React.useMemo(() => generateRandomWords(60, words), []);
-
+  const [randomWords, setRandomWords] = React.useState<string[]>(() =>
+    generateRandomWords(60, words)
+  );
   const [timerStarted, setTimerStarted] = React.useState(false);
   const [timeRemaining, setTimeRemaining] = React.useState(TOTAL_TIME);
   const [typedWords, setTypedWords] = React.useState("");
+  const [correctWordsIndexes, setCorrectWordsIndexes] = React.useState<
+    number[]
+  >([]);
+  const [WPM, setWPM] = React.useState(0);
+  const textareRef = React.useRef<HTMLTextAreaElement>(null);
 
   function handleTyping(event: React.FormEvent<HTMLTextAreaElement>) {
     if (!timerStarted) {
@@ -16,45 +23,82 @@ export default function SpeedTyping() {
     setTypedWords(event.currentTarget.value);
   }
 
-  console.log(typedWords);
+  function handleGameEnd() {
+    const { wpm, correctWordsByIndex } = calculateScore(
+      randomWords,
+      typedWords,
+      TOTAL_TIME - timeRemaining
+    );
+    setWPM(wpm);
+    setCorrectWordsIndexes(correctWordsByIndex);
+  }
+
+  function resetGame() {
+    setRandomWords(generateRandomWords(60, words));
+    setTypedWords("");
+    setTimeRemaining(TOTAL_TIME);
+    setTimerStarted(false);
+    setCorrectWordsIndexes([]);
+    setWPM(0);
+    if (textareRef.current) {
+      textareRef.current.value = "";
+      setTimeout(() => {
+        textareRef.current?.focus();
+      }, 0);
+    }
+  }
+
+  const onGameEnd = React.useEffectEvent(() => handleGameEnd());
 
   React.useEffect(() => {
     if (!timerStarted) return;
-    if (timeRemaining === 0) return;
+    if (timeRemaining === 0) {
+      onGameEnd();
+      return;
+    }
 
     const interval = setInterval(() => {
       setTimeRemaining((prev) => prev - 1);
     }, 1000);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timerStarted, timeRemaining]);
 
   /* STATE DERIVED VALUES */
   const gameFinished = timeRemaining === 0;
-  const wordTrackCount = typedWords.trim().split(" ").length;
+  const wordTrackCount = typedWords.trim().split(" ").filter(Boolean).length;
 
   return (
     <>
       <section className="font-mono bg-white border-primary-teal border select-none p-4 rounded-xl sm:p-6 md:p-8 text-left">
-        {randomWords.map((word, index) => (
-          <span
-            className={typedWords && index < wordTrackCount ? "font-bold" : ""}
-            key={index}
-          >{`${word} `}</span>
-        ))}
+        {randomWords.map((word, index) => {
+          const isIncorrect = !correctWordsIndexes.includes(index);
+          const classNames = !gameFinished
+            ? typedWords && index < wordTrackCount
+              ? "font-bold"
+              : ""
+            : isIncorrect
+            ? "text-red-500 font-bold"
+            : "";
+          return <span className={classNames} key={index}>{`${word} `}</span>;
+        })}
       </section>
       <section className="space-y-8">
         <textarea
+          ref={textareRef}
           className="outline-none font-mono bg-primary-teal/15 rounded-xl p-4 w-full resize-none h-40 sm:h-56 md:h-52 sm:p-6 md:p-8 text-xs sm:text-base focus-visible:ring-primary-teal focus-visible:ring-2 disabled:opacity-50"
           placeholder="Start typing the words to begin the test..."
           spellCheck="false"
           autoComplete="off"
           autoCorrect="off"
+          autoFocus
           autoCapitalize="off"
           onInput={handleTyping}
           disabled={gameFinished}
         ></textarea>
         <button
           disabled={timerStarted && !gameFinished}
+          onClick={resetGame}
           className="transition-all w-fit mx-auto duration-300 text-base sm:text-lg block bg-primary-teal/15 text-primary-teal font-bold py-2 px-8 rounded-lg cursor-pointer ring-primary-teal ring-2 border-b-primary-teal border-b-2 hover:bg-primary-teal/30 hover:scale-105 disabled:opacity-30 disabled:pointer-events-none disabled:cursor-not-allowed"
         >
           Play Again
@@ -69,7 +113,7 @@ export default function SpeedTyping() {
           <div className="flex flex-col gap-3">
             <span>Speed (WPM):</span>
             <span className="text-center text-2xl sm:text-3xl text-primary-teal font-medium">
-              0
+              {WPM}
             </span>
           </div>
         </div>

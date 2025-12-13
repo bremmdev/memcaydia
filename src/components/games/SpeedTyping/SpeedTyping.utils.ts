@@ -1,4 +1,4 @@
-export const TOTAL_TIME = 60;
+export const TOTAL_TIME = 20;
 
 export function generateRandomWords(count: number, wordList: string[]) {
   const randomWords: string[] = [];
@@ -14,4 +14,31 @@ export function generateRandomWords(count: number, wordList: string[]) {
     randomWords.push(wordList[randomIndex]);
   }
   return randomWords;
+}
+
+export function calculateScore(
+  words: string[],
+  typedWords: string,
+  timeInSeconds: number
+) {
+  // Split typed words by spaces and filter out any empty strings
+  const typedWordsArray = typedWords.trim().split(" ").filter(Boolean);
+
+  const correctWordsByIndex = words.reduce<number[]>(
+    (acc, correctWord, index) => {
+      const typedWord = typedWordsArray[index];
+      if (typedWord && typedWord === correctWord) {
+        acc.push(index);
+      }
+      return acc;
+    },
+    []
+  );
+
+  const wpm = Math.round((correctWordsByIndex.length / timeInSeconds) * 60);
+
+  return {
+    wpm,
+    correctWordsByIndex,
+  };
 }
