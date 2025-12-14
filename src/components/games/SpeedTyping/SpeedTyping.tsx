@@ -74,10 +74,11 @@ export default function SpeedTyping() {
   /* STATE DERIVED VALUES */
   const gameFinished = timeRemaining === 0;
   const wordTrackCount = typedWords.trim().split(" ").filter(Boolean).length;
+  const showMobileLastSeconds = timeRemaining !== 0 && timeRemaining <= 5;
 
   return (
     <>
-      <section className="font-mono bg-white border-primary-teal border select-none p-4 rounded-xl sm:p-6 md:p-8 text-left">
+      <section className="font-mono bg-white border-primary-teal border select-none p-2.5 rounded-xl sm:p-6 md:p-8 sm:text-left relative text-xs sm:text-base">
         {randomWords.map((word, index) => {
           const isIncorrect = !correctWordsIndexes.includes(index);
           const classNames = !gameFinished
@@ -89,6 +90,12 @@ export default function SpeedTyping() {
             : "";
           return <span className={classNames} key={index}>{`${word} `}</span>;
         })}
+        {/* for mobile devices, show as overlay or words because of limited screen space */}
+        {showMobileLastSeconds && (
+          <span className="sm:hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-9xl z-10 opacity-30 text-primary-teal font-medium transition-all">
+            {timeRemaining}
+          </span>
+        )}
       </section>
       <section className="space-y-8">
         <textarea
