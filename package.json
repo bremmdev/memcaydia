@@ -11,7 +11,7 @@
     "swa": "cd api && tsc && cd .. && swa start http://localhost:5173 --api-location api"
   },
   "engines": {
-    "node": ">22.0.0"
+    "node": "22.21.1"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.9",
@@ -20,22 +20,25 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-router": "^7.2.0",
-    "tailwind-merge": "^2.5.2"
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "@tailwindcss/postcss": "^4.0.0",
-    "@types/node": "^22.5.0",
+    "@types/node": "^22.19.17",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^4.3.1",
+    "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^9.39.2",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
     "tailwindcss": "^4.0.0",
-    "typescript": "^5.5.3",
+    "typescript": "^6.0.2",
     "typescript-eslint": "^8.0.1",
-    "vite": "^6.2.0"
+    "vite": "^8.0.8"
+  },
+  "volta": {
+    "node": "22.22.2"
   }
 }
