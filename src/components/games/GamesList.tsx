@@ -26,7 +26,7 @@ export default function GamesList() {
               <img
                 src={game.image}
                 alt={game.name}
-                className="max-h-56 w-full"
+                className="h-56 w-full object-cover"
               />
               <div className="p-6 border border-teal-500 border-t-0 rounded-b-md space-y-3 group-hover:border-primary-teal">
                 <h3
