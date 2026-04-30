@@ -69,7 +69,7 @@ export default function StroopEffect() {
             <div className={cn("flex flex-col items-center gap-12", gameOver ? "opacity-50" : "")}>
                 {/** We rely on the key to force a re-render of the span when the ink color changes. We never have the same ink color twice in a row. */}
                 <span key={colorCombination.inkColor} className={cn("text-3xl text-primary-teal font-medium animate-fade-in", colorMap[colorCombination.inkColor])}>{colorCombination.wordColor}</span>
-                <div className="flex gap-4">
+                <div className="flex gap-2 md:gap-4 justify-center">
                     {Object.keys(colorMap).map((color) => (
                         <button key={color} className={cn("size-16 sm:size-24 rounded-lg text-white font-medium text-center flex items-center justify-center", colorMapBg[color as ColorCombination["inkColor"]])} disabled={gameOver} onClick={() => handleColorClick(color as ColorCombination["inkColor"])}>
                             {color}
@@ -77,7 +77,7 @@ export default function StroopEffect() {
                     ))}
                 </div>
                 <p className="text-center">Click the color that matches the <span className="text-primary-teal font-bold">ink color</span> of the word, not what the word says.<br />Timer starts when you click the first color.</p>
-                <div className="flex justify-between mx-auto w-1/2">
+                <div className="flex justify-between mx-auto w-full md:w-1/2 mb-4">
                     <div className="flex flex-col gap-3">
                         <span>Time Remaining:</span>
                         <span className="text-center text-2xl sm:text-3xl text-primary-teal font-medium">
@@ -85,7 +85,7 @@ export default function StroopEffect() {
                         </span>
                     </div>
                     <div className="flex flex-col gap-3">
-                        <span>Speed (WPM):</span>
+                        <span>Score:</span>
                         <span className="text-center text-2xl sm:text-3xl text-primary-teal font-medium">
                             {score}
                         </span>
