@@ -15,6 +15,9 @@ dist-ssr
 
 *.tsbuildinfo
 
+# infra outputs contain account-specific values (account id, ARNs)
+infra/outputs.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
