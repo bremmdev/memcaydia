@@ -4,7 +4,7 @@ import React from "react";
 
 async function getGames() {
   try {
-    const response = await fetch("/api/games");
+    const response = await fetch("/games.json");
 
     if (!response.ok) {
       throw new Error("Failed to fetch games");
