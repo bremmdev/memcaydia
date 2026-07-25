@@ -4,7 +4,7 @@ import Container from "@/components/layout/Container";
 import useDocumentTitle from "@/hooks/useDocumentTitle";
 
 export default function IndexPage() {
-  useDocumentTitle("Memcaydia.", true);
+  useDocumentTitle("Memcaydia", true);
 
   return (
     <>
