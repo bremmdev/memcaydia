@@ -5,7 +5,7 @@
 #   1. Private S3 bucket in eu-central-1 with all public access blocked
 #   2. CloudFront Origin Access Control (OAC)
 #   3. CloudFront distribution ("memcaydia-cdn") that serves the bucket via OAC,
-#      with SPA-friendly 403/404 -> /index.html rewrites
+#      with 403/404 answered by /index.html (status preserved, see infra/README.md)
 #   4. Bucket policy that only allows reads from this specific distribution
 #
 
@@ -130,13 +130,13 @@ else
       {
         "ErrorCode": 403,
         "ResponsePagePath": "/index.html",
-        "ResponseCode": "200",
+        "ResponseCode": "403",
         "ErrorCachingMinTTL": 10
       },
       {
         "ErrorCode": 404,
         "ResponsePagePath": "/index.html",
-        "ResponseCode": "200",
+        "ResponseCode": "404",
         "ErrorCachingMinTTL": 10
       }
     ]
@@ -146,7 +146,12 @@ else
 }
 EOF
 )
-  # CachePolicyId above is the AWS managed "CachingOptimized" policy
+  # CachePolicyId above is the AWS managed "CachingOptimized" policy.
+  # The error responses keep the original 403/404 status on purpose: valid client
+  # routes are already rewritten to /index.html (200) by the url-rewrite.js
+  # CloudFront function, so anything reaching here really is missing. Serving
+  # /index.html only makes the app render its own NotFound page.
+  # Note: that function is not created here and must be attached by hand.
   read -r DIST_ID DIST_ARN DIST_DOMAIN <<<"$(aws cloudfront create-distribution \
     --distribution-config "$DIST_CONFIG" \
     --query 'Distribution.[Id,ARN,DomainName]' --output text)"

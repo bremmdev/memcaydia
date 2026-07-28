@@ -20,7 +20,8 @@ Hosting setup for memcaydia: a private S3 bucket fronted by CloudFront.
   on re-runs. The distribution is configured with:
   - the private bucket as origin (via OAC)
   - `index.html` as default root object
-  - 403/404 rewritten to `/index.html` with status 200 (SPA client-side routing)
+  - 403/404 custom error responses pointing at `/index.html` — see
+    [SPA routing](#spa-routing) for the values actually in use
   - HTTPS redirect, compression, the managed _CachingOptimized_ cache policy,
     the default CloudFront certificate and `PriceClass_100` (North America +
     Europe).
@@ -30,6 +31,76 @@ Hosting setup for memcaydia: a private S3 bucket fronted by CloudFront.
 
 Note: CloudFront itself is a global service; "eu-central-1" applies to the S3
 origin bucket.
+
+## SPA routing
+
+The app is a client-side router (React Router, see `src/App.tsx`), but S3 only
+holds `index.html` and `/assets/*`. A deep link or a page refresh on
+`/highscores` asks S3 for a key that doesn't exist, and because the bucket is
+private and nothing is granted `s3:ListBucket`, S3 answers **403 AccessDenied**
+rather than 404. Two mechanisms handle that, doing deliberately different jobs.
+
+### 1. CloudFront function (`url-rewrite.js`) — valid routes
+
+Attached to the distribution's default cache behavior on the **viewer request**
+event. It rewrites the URI of *known* client routes to `/index.html`, so S3
+serves the app shell and the browser gets a plain **200** for a real page:
+
+- `/assets/*`, `/favicon.ico` and any path with a file extension are passed
+  through untouched — those are real objects in the bucket.
+- `/`, `/highscores` and `/games/*` are rewritten to `/index.html`.
+- anything else is passed through **on purpose**, so it fails at the origin and
+  falls into the error handling below.
+
+The route list is hardcoded in the function and must be kept in sync with the
+router in `src/App.tsx` whenever a route is added or renamed.
+
+**This function is not created by `create-infra.sh`.** It was copied by hand
+into CloudFront console → Functions → create function → paste `url-rewrite.js`
+→ _Publish_ → associate with the distribution's default behavior on _Viewer
+request_. `infra/url-rewrite.js` is the source of truth: after editing it you
+have to paste, publish and (if newly created) re-associate it manually.
+
+### 2. Custom error responses — everything else
+
+Configured on the distribution (CloudFront console → distribution → _Error
+pages_):
+
+| HTTP error code | Minimum TTL (seconds) | Response page path | HTTP response code |
+| --------------- | --------------------- | ------------------ | ------------------ |
+| 403             | 10                    | `/index.html`      | 403                |
+| 404             | 10                    | `/index.html`      | 404                |
+
+Why it looks like this:
+
+- **`/index.html` as the response page** — the visitor gets the styled app shell
+  instead of CloudFront's raw XML error body. React Router's catch-all `*` route
+  renders `NotFound`, so a mistyped URL looks like part of the site.
+- **Status code preserved (403 → 403, 404 → 404), not rewritten to 200** — the
+  function above already turns every *valid* route into a 200, so anything that
+  reaches the error path is genuinely not a page. Returning 200 here would be a
+  soft 404: crawlers would index nonexistent URLs, and uptime checks, logs and
+  `curl` could not tell a working page from a broken link. Keeping the real 4xx
+  gives correct semantics to machines while humans still see the in-app 404.
+- **Both 403 and 404** — 403 is the one that actually fires (private bucket,
+  no `ListBucket` → AccessDenied on a missing key); 404 covers the cases where
+  S3 does report `NoSuchKey`.
+- **Minimum TTL 10 seconds** — how long an edge caches the error response. Short
+  enough that a path which starts existing after the next deploy isn't pinned to
+  an error, long enough that bot traffic hitting nonexistent URLs doesn't hit
+  the origin on every request.
+
+Side effect worth knowing: a request for an asset that no longer exists (a stale
+hashed `/assets/index-<old>.js` referenced by a cached HTML page) also gets
+`index.html` back, with a 403 and `Content-Type: text/html`, so the browser
+reports a MIME/parse error rather than a clean 404. Deploying with `sync` +
+invalidation (see [Deployment](#deployment)) keeps HTML and asset names in sync,
+which is what prevents this.
+
+`create-infra.sh` creates exactly these error responses, so a distribution built
+from scratch matches the table. The **function is still manual** — a fresh
+distribution has none attached, and until it is, every client route falls
+through to the 403 path and gets a 403 instead of a 200.
 
 ## Pricing
 

@@ -12,7 +12,7 @@ function handler(event) {
     return request;
   }
 
-  // Route patterns generated/maintained alongside your TanStack route tree.
+  // Keep in sync with the React Router route tree in src/App.tsx.
   const knownRoute =
     uri === "/" || uri === "/highscores" || uri.startsWith("/games/");
 
