@@ -43,7 +43,7 @@ rather than 404. Two mechanisms handle that, doing deliberately different jobs.
 ### 1. CloudFront function (`url-rewrite.js`) — valid routes
 
 Attached to the distribution's default cache behavior on the **viewer request**
-event. It rewrites the URI of *known* client routes to `/index.html`, so S3
+event. It rewrites the URI of _known_ client routes to `/index.html`, so S3
 serves the app shell and the browser gets a plain **200** for a real page:
 
 - `/assets/*`, `/favicon.ico` and any path with a file extension are passed
@@ -68,7 +68,7 @@ pages_):
 
 | HTTP error code | Minimum TTL (seconds) | Response page path | HTTP response code |
 | --------------- | --------------------- | ------------------ | ------------------ |
-| 403             | 10                    | `/index.html`      | 403                |
+| 403             | 10                    | `/index.html`      | 404                |
 | 404             | 10                    | `/index.html`      | 404                |
 
 Why it looks like this:
@@ -76,8 +76,8 @@ Why it looks like this:
 - **`/index.html` as the response page** — the visitor gets the styled app shell
   instead of CloudFront's raw XML error body. React Router's catch-all `*` route
   renders `NotFound`, so a mistyped URL looks like part of the site.
-- **Status code preserved (403 → 403, 404 → 404), not rewritten to 200** — the
-  function above already turns every *valid* route into a 200, so anything that
+- **Status code preserved (403 → 404, 404 → 404), not rewritten to 200** — the
+  function above already turns every _valid_ route into a 200, so anything that
   reaches the error path is genuinely not a page. Returning 200 here would be a
   soft 404: crawlers would index nonexistent URLs, and uptime checks, logs and
   `curl` could not tell a working page from a broken link. Keeping the real 4xx
